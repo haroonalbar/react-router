@@ -1,13 +1,16 @@
 import { Link } from "react-router-dom";
-import { Outlet, useLoaderData } from "react-router-dom";
-import { getContacts } from "../contacts";
-
+import { Outlet, useLoaderData, Form } from "react-router-dom";
+import { getContacts, createContact } from "../contacts";
+export async function action() {
+  const contact = await createContact();
+  return { contact };
+}
 export async function loader() {
   const contacts = await getContacts();
   return { contacts };
 }
 export default function Root() {
-  const {contacts} = useLoaderData();
+  const { contacts } = useLoaderData();
   return (
     <>
       <div id="sidebar">
@@ -21,19 +24,15 @@ export default function Root() {
               type="search"
               name="q"
             />
-            <div
-              id="search-spinner"
-              aria-hidden
-              hidden={true}
-            />
-            <div
-              className="sr-only"
-              aria-live="polite"
-            ></div>
+            <div id="search-spinner" aria-hidden hidden={true} />
+            <div className="sr-only" aria-live="polite"></div>
           </form>
-          <form method="post">
+          {/* <form method="post">
             <button type="submit">New</button>
-          </form>
+          </form> */}
+          <Form method="post">
+            <button type="submit">New</button>
+          </Form>
         </div>
         <nav>
           {/* <ul> */}
@@ -69,7 +68,7 @@ export default function Root() {
         </nav>
       </div>
       <div id="detail">
-        <Outlet/>
+        <Outlet />
       </div>
     </>
   );
